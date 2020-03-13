@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import apps.betan9ne.flagnotflag.helper.SessionManager;
 
@@ -56,3 +57,27 @@ public class Splash_screen extends AppCompatActivity {
         }
     }
 
+
+    /*public void flags()
+    {
+        Quiz quiz;
+        int i = 0;
+        quiz = new Quiz(i++,"ad.png","Andorra",0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"ae.png","United Arab Emirates",0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"af.png","Afghanistan",0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"ag.png","Antigua and Barbuda",0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"al.png","Albania", 0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"am.png","Armenia", 0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"ao.png","Angola", 0);
+        flags.add(quiz);
+        quiz = new Quiz(i++,"ar.png","Argentina",0);
+        flags.add(quiz);
+
+        Toast.makeText(this, flags.size()+"", Toast.LENGTH_SHORT).show();
+    }*/

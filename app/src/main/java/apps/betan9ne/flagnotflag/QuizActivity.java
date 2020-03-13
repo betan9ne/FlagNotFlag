@@ -53,7 +53,7 @@ public class QuizActivity extends AppCompatActivity {
         timer= findViewById(R.id.timer);
         notflag = findViewById(R.id.notflag);
         flags = new ArrayList<>();
-        flags();
+
         startTimer(60);
 
 
@@ -64,17 +64,22 @@ public class QuizActivity extends AppCompatActivity {
                 next();
             }
         });
-try
+        try
         {
             JSONObject resObject = new JSONObject(loadJSONFromAsset());
             JSONArray jsonArray = resObject.getJSONArray("flags");
 
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONArray jsonArray1 = jsonArray.getJSONArray(i);
-                for (int j = 0; j < jsonArray1.length(); j++) {
-                    Log.i("Value","->" +jsonArray1.getString(j));
+                    int c= 0;
+                    JSONObject feedObj = (JSONObject) jsonArray.get(i);
+                    Quiz item = new Quiz();
+                    item.setId(c++);
+                    item.setFlag(feedObj.getString("file"));
+                    item.setCountry(feedObj.getString("name"));
+                    item.setStatus(feedObj.getInt("status"));
+                    flags.add(item);
                 }
-            }
+
 
         }
         catch (JSONException e)
@@ -82,12 +87,13 @@ try
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        Toast.makeText(this, flags.size()+"", Toast.LENGTH_SHORT).show();
     }
 
     public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getApplicationContext().getAssets().open("flags.json");
+            InputStream is = getApplicationContext().getAssets().open("flag.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -173,29 +179,7 @@ try
             countDownTimer = null;
         }
     }
-    public void flags()
-    {
-        Quiz quiz;
-        int i = 0;
-        quiz = new Quiz(i++,"ad.png","Andorra");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"ae.png","United Arab Emirates");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"af.png","Afghanistan");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"ag.png","Antigua and Barbuda");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"al.png","Albania");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"am.png","Armenia");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"ao.png","Angola");
-        flags.add(quiz);
-        quiz = new Quiz(i++,"ar.png","Argentina");
-        flags.add(quiz);
 
-        Toast.makeText(this, flags.size()+"", Toast.LENGTH_SHORT).show();
-    }
 
 
 }
