@@ -26,6 +26,23 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
+        <Button
+            android:id="@+id/done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/l"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/border"
+            android:clickable="true"
+            android:padding="20dp"
+            android:text="SEE SCORE"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
@@ -35,6 +52,7 @@
             app:srcCompat="@drawable/bd" />
 
         <LinearLayout
+            android:id="@+id/l"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/imageView"

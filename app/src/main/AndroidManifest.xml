@@ -3,6 +3,7 @@
     package="apps.betan9ne.flagnotflag">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".QuizActivity"></activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4118077067837317~1079558788"/>
+        <activity android:name=".DoneActivity"></activity>
+        <activity android:name=".QuizActivity" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".Splash_screen" />
         <activity android:name=".MainActivity">

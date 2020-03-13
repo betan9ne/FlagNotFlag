@@ -2,13 +2,19 @@ package apps.betan9ne.flagnotflag;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,35 +39,133 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class QuizActivity extends AppCompatActivity {
     private List<Quiz> flags = new ArrayList<>();
-    Button flag, notflag;
+    Button flag, notflag, done;
     TextView timer;
-    int counter = 4;
+    String counter;
     ImageView _flag;
+    Bundle b;
+    int isFlag = 0;
+    int isNotflag = 0;
+    int attempts = 0;
     ArrayList<Integer> answeredAraay = new ArrayList<>();
+    int answerCode;
+    Vibrator vibe;
+    private long startTime;  // 1000 = 1 second
+    private final long interval = 1000;
     private static CountDownTimer countDownTimer;
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        if(getIntent().getExtras() != null) {
+            b = getIntent().getExtras();
+            startTime = Long.parseLong(b.getString("count"))*1000;
+            startTime = startTime+1000;
+          //    Toast.makeText(this, startTime+"", Toast.LENGTH_SHORT).show();
+        }
+
+        final MyCountDown countdown = new MyCountDown(startTime,interval);
+        prefs = this.getSharedPreferences("flagNoflag", Context.MODE_PRIVATE);
+
+        vibe= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         flag = findViewById(R.id.flag);
         _flag = findViewById(R.id.imageView);
         timer= findViewById(R.id.timer);
         notflag = findViewById(R.id.notflag);
+        done = findViewById(R.id.done);
         flags = new ArrayList<>();
 
-        startTimer(60);
 
 
 
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int finalScore;
+                finalScore = isFlag;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("score", finalScore*100);
+                editor.putInt("attempts", attempts);
+                editor.commit();
+
+                Intent asd = new Intent(getApplicationContext(), DoneActivity.class);
+                startActivity(asd);
+                 finish();
+            }
+        });
         flag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                next();
+                if(answeredAraay.size() == 50)
+                {
+                    Intent asd = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(asd);
+                    answeredAraay.clear();
+                    finish();
+
+                }
+                else
+                {
+                    if(answerCode == 0)
+                    {
+                        Toast.makeText(QuizActivity.this, "is Flag Correct", Toast.LENGTH_SHORT).show();
+                        isFlag++;
+                    }
+                    else
+                    {
+                        isNotflag++;
+                        Toast.makeText(QuizActivity.this, "is not flag Wrong", Toast.LENGTH_SHORT).show();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            vibe.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        } else {
+                            vibe.vibrate(500);
+                        }
+                    }
+                    attempts++;
+                    next();
+                }
+
+            }
+        });
+        notflag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(answeredAraay.size() == 50)
+                {
+                    Intent asd = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(asd);
+                    answeredAraay.clear();
+                    finish();
+                }
+                else
+                {
+                    if(answerCode == 1)
+                    {
+                        Toast.makeText(QuizActivity.this, "NOt flag Correct", Toast.LENGTH_SHORT).show();
+                        isNotflag++;
+                    }
+                    else
+                    {
+                        isFlag++;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            vibe.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        } else {
+                            vibe.vibrate(500);
+                        }
+                        Toast.makeText(QuizActivity.this, "Is flag Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                    attempts++;
+                    next();
+                }
             }
         });
         try
@@ -79,15 +183,39 @@ public class QuizActivity extends AppCompatActivity {
                     item.setStatus(feedObj.getInt("status"));
                     flags.add(item);
                 }
-
-
         }
         catch (JSONException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Toast.makeText(this, flags.size()+"", Toast.LENGTH_SHORT).show();
+        next();
+        countdown.start();
+    }
+
+    public class MyCountDown extends CountDownTimer {
+        public MyCountDown(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+            // TODO Auto-generated constructor stub
+        }
+
+        @Override
+        public void onFinish() {
+            // TODO Auto-generated method stub
+            TextView result = (TextView) findViewById(R.id.timer);
+            result.setText("0");
+             flag.setVisibility(View.GONE);
+             notflag.setVisibility(View.GONE);
+             done.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onTick(long remain) {
+            // TODO Auto-generated method stub
+            TextView result = (TextView) findViewById(R.id.timer);
+            int timeRemain = (int) (remain) / 1000;
+            result.setText(timeRemain+"");
+        }
+
     }
 
     public String loadJSONFromAsset() {
@@ -120,27 +248,13 @@ public class QuizActivity extends AppCompatActivity {
             getNext(randomNumber);
             answeredAraay.add(randomNumber);
         }
-        if(answeredAraay.size() == 4)
-        {
-          //  Intent asd = new Intent(getApplicationContext(), MainActivity.class);
-         /*   Bundle bundle = new Bundle();
-            bundle.putInt("correct_answer",correct_Answer);
-            bundle.putInt("wrong_answer",wrong_answer);
-            asd.putExtras(bundle);*/
-         //   startActivity(asd);
-            answeredAraay.clear();
-            flag.setVisibility(View.GONE);
-            notflag.setVisibility(View.GONE);
-        //    finish();
-        }
     }
 
     public void getNext(int i)
     {
         Quiz quiz = flags.get(i);
         _flag.setImageBitmap(getBitmapFromAssets(quiz.getFlag()));
-        Toast.makeText(this, quiz.getCountry()+"", Toast.LENGTH_SHORT).show();
-
+        answerCode = quiz.getStatus();
     }
 
     // Custom method to get assets folder image as bitmap
@@ -155,30 +269,7 @@ public class QuizActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    private void startTimer(int noOfMinutes) {
-        countDownTimer = new CountDownTimer(noOfMinutes, 1000) {
-            public void onTick(long millisUntilFinished) {
-                long millis = millisUntilFinished;
-                //Convert milliseconds into hour,minute and seconds
-                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-              //  timer.setText(hms);//set text
-            }
 
-            public void onFinish() {
-
-            //    timer.setText("TIME'S UP!!"); //On finish change timer text
-                countDownTimer = null;//set CountDownTimer to null
-                stopCountdown();
-             }
-        }.start();
-
-    }
-    private void stopCountdown() {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
-    }
 
 
 

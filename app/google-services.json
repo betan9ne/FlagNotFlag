@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "693101652764",
+    "firebase_url": "https://flagnotflag.firebaseio.com",
+    "project_id": "flagnotflag",
+    "storage_bucket": "flagnotflag.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693101652764:android:f54697e10ed014922c68d9",
+        "android_client_info": {
+          "package_name": "apps.betan9ne.flagnotflag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693101652764-5nuqit65hbmek5pciln5k40fqnvki3rm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "apps.betan9ne.flagnotflag",
+            "certificate_hash": "7b8787ce38802515df8866601b6774de254a5f2a"
+          }
+        },
+        {
+          "client_id": "693101652764-38amaphoseiih75rdlf9810bldetseu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWUNUBHfaRYnoE2eHGZ9Tm2wYhBuLJQ4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693101652764-38amaphoseiih75rdlf9810bldetseu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
