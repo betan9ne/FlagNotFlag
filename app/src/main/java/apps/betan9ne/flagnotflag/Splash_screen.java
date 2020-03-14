@@ -23,7 +23,7 @@ public class Splash_screen extends AppCompatActivity {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 public void run(){
                     try{
-                        sleep(1000);
+                        sleep(3000);
                     }
                     catch(InterruptedException ex)
                     {

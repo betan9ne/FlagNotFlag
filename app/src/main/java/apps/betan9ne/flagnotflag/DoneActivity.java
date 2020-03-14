@@ -11,9 +11,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class DoneActivity extends AppCompatActivity {
     TextView points, hiscoret;
     Button tryagian, share;
+    DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +30,10 @@ public class DoneActivity extends AppCompatActivity {
         tryagian= findViewById(R.id.tryagain);
         hiscoret= findViewById(R.id.hiscore);
 
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-4118077067837317~1079558788");
+        AdView mAdView = findViewById(R.id.adView2);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         SharedPreferences prefs = this.getSharedPreferences("flagNoflag", Context.MODE_PRIVATE);
         int score = prefs.getInt("score", 0); //0 is the default value
@@ -41,9 +52,6 @@ public class DoneActivity extends AppCompatActivity {
             hiscoret.setText(hiscore+"");
         }
         editor.commit();
-
-
-
         tryagian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,5 +62,10 @@ public class DoneActivity extends AppCompatActivity {
         });
         share= findViewById(R.id.share);
         points.setText(score+"/"+attempts);
+    }
+
+    public void updateLederboard()
+    {
+        mDatabase = FirebaseDatabase.getInstance().getReference("leaderboard");
     }
 }

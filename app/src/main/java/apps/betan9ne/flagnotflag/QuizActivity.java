@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,6 +65,7 @@ public class QuizActivity extends AppCompatActivity {
     private final long interval = 1000;
     private static CountDownTimer countDownTimer;
     SharedPreferences prefs;
+    MediaPlayer mediaPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,8 +90,10 @@ public class QuizActivity extends AppCompatActivity {
         done = findViewById(R.id.done);
         flags = new ArrayList<>();
 
-
-
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-4118077067837317~1079558788");
+        AdView mAdView = findViewById(R.id.adView2);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +107,8 @@ public class QuizActivity extends AppCompatActivity {
 
                 Intent asd = new Intent(getApplicationContext(), DoneActivity.class);
                 startActivity(asd);
+                mediaPlayer.stop();
+                mediaPlayer.release();
                  finish();
             }
         });
@@ -110,6 +120,8 @@ public class QuizActivity extends AppCompatActivity {
                     Intent asd = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(asd);
                     answeredAraay.clear();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
                     finish();
 
                 }
@@ -133,7 +145,6 @@ public class QuizActivity extends AppCompatActivity {
                     attempts++;
                     next();
                 }
-
             }
         });
         notflag.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +155,8 @@ public class QuizActivity extends AppCompatActivity {
                     Intent asd = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(asd);
                     answeredAraay.clear();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
                     finish();
                 }
                 else
@@ -190,6 +203,8 @@ public class QuizActivity extends AppCompatActivity {
         }
         next();
         countdown.start();
+        mediaPlayer= MediaPlayer.create(QuizActivity.this, R.raw.tick);
+        mediaPlayer.start();
     }
 
     public class MyCountDown extends CountDownTimer {
@@ -206,12 +221,14 @@ public class QuizActivity extends AppCompatActivity {
              flag.setVisibility(View.GONE);
              notflag.setVisibility(View.GONE);
              done.setVisibility(View.VISIBLE);
+             mediaPlayer.stop();
+             mediaPlayer.release();
         }
 
         @Override
         public void onTick(long remain) {
-            // TODO Auto-generated method stub
-            TextView result = (TextView) findViewById(R.id.timer);
+
+            TextView result =   findViewById(R.id.timer);
             int timeRemain = (int) (remain) / 1000;
             result.setText(timeRemain+"");
         }
