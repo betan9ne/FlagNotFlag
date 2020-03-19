@@ -1,36 +1,35 @@
 package apps.betan9ne.flagnotflag.helper;
 
 public class leader_item {
-    String name, comment;
-    String id;
+    String name;
+    int score, time;
     public leader_item(){}
 
-    public leader_item(String comment, String name, String id)
+    public leader_item(String name, int score, int time)
     {
-        this.comment = comment;
+        this.score = score;
         this.name = name;
-        this.id = id;
+        this.time = time;
 
     }
 
-    public String getId() {
-        return id;
+    public int getScore() {
+        return score;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getTime() {
+        return time;
     }
 
-    public String getComment() {
-        return comment;
+    public void setScore(int score) {
+        this.score = score;
     }
 
+    public void setTime(int time) {
+        this.time = time;
+    }
     public String getName() {
         return name;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public void setName(String name) {

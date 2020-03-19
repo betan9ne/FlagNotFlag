@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -31,11 +32,7 @@ import com.google.android.gms.ads.MobileAds;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,9 +41,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+
 
 public class QuizActivity extends AppCompatActivity {
     private List<Quiz> flags = new ArrayList<>();
@@ -63,9 +58,9 @@ public class QuizActivity extends AppCompatActivity {
     Vibrator vibe;
     private long startTime;  // 1000 = 1 second
     private final long interval = 1000;
-    private static CountDownTimer countDownTimer;
     SharedPreferences prefs;
     MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,23 +70,23 @@ public class QuizActivity extends AppCompatActivity {
             b = getIntent().getExtras();
             startTime = Long.parseLong(b.getString("count"))*1000;
             startTime = startTime+1000;
-          //    Toast.makeText(this, startTime+"", Toast.LENGTH_SHORT).show();
         }
 
         final MyCountDown countdown = new MyCountDown(startTime,interval);
         prefs = this.getSharedPreferences("flagNoflag", Context.MODE_PRIVATE);
 
         vibe= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
         flag = findViewById(R.id.flag);
         _flag = findViewById(R.id.imageView);
         timer= findViewById(R.id.timer);
         notflag = findViewById(R.id.notflag);
         done = findViewById(R.id.done);
+        AdView mAdView = findViewById(R.id.adView2);
+
         flags = new ArrayList<>();
 
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-4118077067837317~1079558788");
-        AdView mAdView = findViewById(R.id.adView2);
+
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -103,11 +98,11 @@ public class QuizActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("score", finalScore*100);
                 editor.putInt("attempts", attempts);
-                editor.commit();
+                editor.apply();
 
                 Intent asd = new Intent(getApplicationContext(), DoneActivity.class);
                 startActivity(asd);
-                mediaPlayer.stop();
+//                mediaPlayer.stop();
                 mediaPlayer.release();
                  finish();
             }
@@ -115,7 +110,7 @@ public class QuizActivity extends AppCompatActivity {
         flag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(answeredAraay.size() == 50)
+                if(answeredAraay.size() == 259)
                 {
                     Intent asd = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(asd);
@@ -129,13 +124,16 @@ public class QuizActivity extends AppCompatActivity {
                 {
                     if(answerCode == 0)
                     {
-                        Toast.makeText(QuizActivity.this, "is Flag Correct", Toast.LENGTH_SHORT).show();
+                  //      Toast.makeText(QuizActivity.this, "is Flag Correct", Toast.LENGTH_SHORT).show();
+                    //    flag.setBackgroundColor(Color.parseColor("#009d00"));
+                       // flag.setBackgroundResource(R.drawable.border);
                         isFlag++;
                     }
                     else
                     {
                         isNotflag++;
-                        Toast.makeText(QuizActivity.this, "is not flag Wrong", Toast.LENGTH_SHORT).show();
+                    //    flag.setBackgroundColor(Color.parseColor("#e60000"));
+                        // Toast.makeText(QuizActivity.this, "is not flag Wrong", Toast.LENGTH_SHORT).show();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             vibe.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                         } else {
@@ -150,7 +148,7 @@ public class QuizActivity extends AppCompatActivity {
         notflag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(answeredAraay.size() == 50)
+                if(answeredAraay.size() == 259)
                 {
                     Intent asd = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(asd);
@@ -163,8 +161,10 @@ public class QuizActivity extends AppCompatActivity {
                 {
                     if(answerCode == 1)
                     {
-                        Toast.makeText(QuizActivity.this, "NOt flag Correct", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(QuizActivity.this, "NOt flag Correct", Toast.LENGTH_SHORT).show();
                         isNotflag++;
+                     //   notflag.setBackgroundColor(Color.parseColor("#009d00"));
+
                     }
                     else
                     {
@@ -174,7 +174,8 @@ public class QuizActivity extends AppCompatActivity {
                         } else {
                             vibe.vibrate(500);
                         }
-                        Toast.makeText(QuizActivity.this, "Is flag Wrong", Toast.LENGTH_SHORT).show();
+                   //     notflag.setBackgroundColor(Color.parseColor("#e60000"));
+                      //  Toast.makeText(QuizActivity.this, "Is flag Wrong", Toast.LENGTH_SHORT).show();
                     }
                     attempts++;
                     next();
@@ -221,7 +222,7 @@ public class QuizActivity extends AppCompatActivity {
              flag.setVisibility(View.GONE);
              notflag.setVisibility(View.GONE);
              done.setVisibility(View.VISIBLE);
-             mediaPlayer.stop();
+           //  mediaPlayer.stop();
              mediaPlayer.release();
         }
 
@@ -253,6 +254,7 @@ public class QuizActivity extends AppCompatActivity {
 
     public void next()
     {
+   //     Toast.makeText(this, flags.size()+"", Toast.LENGTH_SHORT).show();
         Random r=new Random();
         int randomNumber;
         do{

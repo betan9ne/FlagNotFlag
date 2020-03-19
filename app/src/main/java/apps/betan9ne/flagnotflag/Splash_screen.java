@@ -23,7 +23,7 @@ public class Splash_screen extends AppCompatActivity {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 public void run(){
                     try{
-                        sleep(3000);
+                        sleep(2000);
                     }
                     catch(InterruptedException ex)
                     {
@@ -81,3 +81,13 @@ public class Splash_screen extends AppCompatActivity {
 
         Toast.makeText(this, flags.size()+"", Toast.LENGTH_SHORT).show();
     }*/
+
+//options = new String[]{"11","16", "21","26","31","36"};
+        /*if(timer == 0)
+        {
+            counter.setText(options[tCounter[0]]);
+        }
+        else
+        {
+            counter.setText(timer+"");
+        }*/

@@ -27,6 +27,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	private static final String KEY_UID = "u_id";
 	private static final String KEY_PHOTO = "photo";
 	private static final String KEY_ISO = "iso";
+	private static final String KEY_SCORE = "score";
 
 
 	public SQLiteHandler(Context context) {
@@ -42,7 +43,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 				+ KEY_PHONE + " TEXT,"
 				+ KEY_UID + " TEXT,"
 				+ KEY_PHOTO + " TEXT,"
-				+ KEY_ISO + " TEXT" + ")";
+				+ KEY_ISO + " TEXT,"
+				+ KEY_SCORE + " TEXT" + ")";
 		db.execSQL(CREATE_LOGIN_TABLE);
 		Log.d(TAG, "Database tables created");
 	}
@@ -59,7 +61,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	/**
 	 * Storing user details in database
 	 * */
-	public void addUser( String email, String u_id, String phone, String photo, String iso) {
+	public void addUser( String email, String u_id, String phone, String photo, String iso, String score) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(KEY_EMAIL, email);
@@ -67,6 +69,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		values.put(KEY_UID, u_id);
 		values.put(KEY_PHOTO, photo);
 		values.put(KEY_ISO, iso);
+		values.put(KEY_SCORE, score);
 		// Inserting Row
 		long id = db.insert(TABLE_LOGIN, null, values);
 		db.close(); // Closing database connection
@@ -79,7 +82,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	 * */
 	public HashMap<String, String> getUserDetails(String tag) {
 		HashMap<String, String> user = new HashMap<String, String>();
-		String selectQuery = "SELECT  * FROM " + TABLE_LOGIN;
+		String selectQuery = "SELECT  * FROM " + TABLE_LOGIN ;
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -91,6 +94,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 			user.put("u_id", cursor.getString(3));
 			user.put("photo", cursor.getString(4));
 			user.put("iso", cursor.getString(5));
+			user.put("score", cursor.getString(6));
 
 		}
 		cursor.close();
@@ -99,21 +103,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		Log.d("get_user", tag+" Fetching user data: " + user.toString());
 
 		return user;
-	}
-
-	/**
-	 * Getting user login status return true if rows are there in table
-	 * */
-	public int getRowCount() {
-		String countQuery = "SELECT  * FROM " + TABLE_LOGIN;
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(countQuery, null);
-		int rowCount = cursor.getCount();
-		db.close();
-		cursor.close();
-
-		// return row count
-		return rowCount;
 	}
 
 	/**

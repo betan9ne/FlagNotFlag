@@ -24,9 +24,6 @@ import apps.betan9ne.flagnotflag.helper.SessionManager;
 
 public class SignInActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
-    String u_id;
-    String _email;
-    String _name;
     String _iso;
     private SQLiteHandler db;
     private SessionManager session;
@@ -79,7 +76,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void onLoggedIn(GoogleSignInAccount googleSignInAccount) {
-        db.addUser(googleSignInAccount.getEmail(), googleSignInAccount.getId(), googleSignInAccount.getDisplayName(), googleSignInAccount.getPhotoUrl()+"", _iso);
+        db.addUser(googleSignInAccount.getEmail(), googleSignInAccount.getId(), googleSignInAccount.getDisplayName(), googleSignInAccount.getPhotoUrl()+"", _iso, "0");
         session.setLogin(true);
         Intent asd = new Intent(SignInActivity.this, MainActivity.class);
         asd.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
