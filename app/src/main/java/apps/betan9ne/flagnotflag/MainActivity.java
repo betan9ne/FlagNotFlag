@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
+import apps.betan9ne.flagnotflag.helper.HighScoreHandler;
 import apps.betan9ne.flagnotflag.helper.SQLiteHandler;
 import apps.betan9ne.flagnotflag.helper.SessionManager;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs;
     GoogleSignInClient googleSignInClient;
     private SQLiteHandler db;
+    private HighScoreHandler hdb;
     private SessionManager session;
     View container;
     @Override
@@ -59,12 +62,18 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
         db = new SQLiteHandler(getApplicationContext());
-        HashMap<String, String> user = db.getUserDetails(MainActivity.class.getSimpleName());
-        String name_ = user.get("name");
-
+        hdb = new HighScoreHandler(getApplicationContext());
         prefs = this.getSharedPreferences("flagNoflag", Context.MODE_PRIVATE);
         int timer = prefs.getInt("timer", 0);
 
+        HashMap<String, String> user = db.getUserDetails(MainActivity.class.getSimpleName());
+        String name_ = user.get("name");
+        String email_= user.get("email");
+
+       /* HashMap<String, String> highscore = hdb.getUserScore(MainActivity.class.getSimpleName(), email_, timer);
+        String score_ = highscore.get("score");
+        Toast.makeText(this, score_+"", Toast.LENGTH_LONG).show();
+*/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -94,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 asd.putExtra("count",counter.getText());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("timer", Integer.parseInt(counter.getText().toString()));
-                editor.commit();
+                editor.putInt("score", 0);
+                editor.apply();
                 startActivity(asd);
             }
         });

@@ -32,16 +32,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import apps.betan9ne.flagnotflag.helper.AppConfig;
+import apps.betan9ne.flagnotflag.helper.HighScoreHandler;
+import apps.betan9ne.flagnotflag.helper.Methods;
 import apps.betan9ne.flagnotflag.helper.SQLiteHandler;
 import apps.betan9ne.flagnotflag.helper.leader_item;
 
 public class DoneActivity extends AppCompatActivity {
     TextView points, hiscoret;
     Button tryagian, share;
-    DatabaseReference mDatabase;
-  //  private FirebaseFirestore mFirestore;
-  //  private Query mQuery;
+
     private SQLiteHandler db;
+    private HighScoreHandler hdb;
     String name, email, u_id;
     int hiscore , timer;
     @Override
@@ -53,12 +54,6 @@ public class DoneActivity extends AppCompatActivity {
         tryagian= findViewById(R.id.tryagain);
         hiscoret= findViewById(R.id.hiscore);
 
-    //    mFirestore = FirebaseFirestore.getInstance();
-
-   /*     mQuery = mFirestore.collection("leaderboard")
-                .orderBy("score", Query.Direction.DESCENDING)
-                .limit(10);
-*/
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-4118077067837317~1079558788");
         AdView mAdView = findViewById(R.id.adView2);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -70,17 +65,22 @@ public class DoneActivity extends AppCompatActivity {
         name = user.get("name");
         email = user.get("email");
 
+        Methods methods = new Methods(getApplicationContext());
+        hdb = new HighScoreHandler(getApplicationContext());
         SharedPreferences prefs = this.getSharedPreferences("flagNoflag", Context.MODE_PRIVATE);
         int score = prefs.getInt("score", 0); //0 is the default value
         hiscore= prefs.getInt("hiscore", 0); //0 is the default value
         timer= prefs.getInt("timer", 0); //0 is the default value
         int attempts= prefs.getInt("attempts", 0); //0 is the default value
 
+        hiscore = prefs.getInt(timer+"f", 0);
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("score", score);
         if(score > hiscore)
         {
-            editor.putInt("hiscore", score);
+            methods.setScore(timer, score);
+            hiscore = score;
             hiscoret.setText(score+"");
             updateLederboard();
         }
@@ -89,10 +89,12 @@ public class DoneActivity extends AppCompatActivity {
             hiscoret.setText(hiscore+"");
         }
         editor.apply();
+        hdb.addScore(email, timer+"", hiscore+"");
         tryagian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent asd = new Intent(getApplicationContext(), MainActivity.class);
+                asd.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(asd);
                 finish();
             }
@@ -115,8 +117,6 @@ public class DoneActivity extends AppCompatActivity {
             }
         });
         points.setText(score+"/"+attempts);
-
-
     }
 
 
@@ -136,7 +136,7 @@ public class DoneActivity extends AppCompatActivity {
                     //    Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
                     } else {
                         String errorMsg = jObj.getString("message");
-                        Toast.makeText(getApplicationContext(), "Sorry we were not able to update your scores on our servers", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), "Sorry we were not able to update your scores on our servers", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     // JSON error
@@ -146,7 +146,7 @@ public class DoneActivity extends AppCompatActivity {
         },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),	"Could not update high scores", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(),	"Could not update high scores", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override

@@ -124,17 +124,12 @@ public class QuizActivity extends AppCompatActivity {
                 {
                     if(answerCode == 0)
                     {
-                  //      Toast.makeText(QuizActivity.this, "is Flag Correct", Toast.LENGTH_SHORT).show();
-                    //    flag.setBackgroundColor(Color.parseColor("#009d00"));
-                       // flag.setBackgroundResource(R.drawable.border);
-                        isFlag++;
+                           isFlag++;
                     }
                     else
                     {
                         isNotflag++;
-                    //    flag.setBackgroundColor(Color.parseColor("#e60000"));
-                        // Toast.makeText(QuizActivity.this, "is not flag Wrong", Toast.LENGTH_SHORT).show();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             vibe.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                         } else {
                             vibe.vibrate(500);
