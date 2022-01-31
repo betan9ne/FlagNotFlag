@@ -35,8 +35,8 @@ import apps.betan9ne.flagnotflag.helper.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
     Button play, logout;
-    ImageView share, rate, leaderboard, about, left, right;
-    TextView option, counter;
+    ImageView share, rate, leaderboard, about;
+    TextView option, counter, left, right;
     SharedPreferences prefs;
     GoogleSignInClient googleSignInClient;
     private SQLiteHandler db;
@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        Snackbar snackbar = Snackbar.make(container, "Hi "+name_+", Welcome to Fast Flag.", Snackbar.LENGTH_LONG);
-        snackbar.show();
+//        Snackbar snackbar = Snackbar.make(container, "Hi "+name_+", Welcome to Fast Flag.", Snackbar.LENGTH_LONG);
+//        snackbar.show();
 
        MobileAds.initialize(getApplicationContext(), "ca-app-pub-4118077067837317~1079558788");
        AdView mAdView = findViewById(R.id.adView2);
@@ -87,12 +87,10 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
         final ArrayList<String> aList = new ArrayList<>();
-        aList.add("11");
-        aList.add("16");
-        aList.add("21");
-        aList.add("26");
-        aList.add("31");
-        aList.add("36");
+        aList.add("10");
+        aList.add("15");
+        aList.add("30");
+        aList.add("35");
         final ListIterator<String> listIterator = aList.listIterator();
         counter.setText(aList.get(0) + "");
 
@@ -122,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String urlf = "http://88radium.com/flag/";
+                String urlf = "https://betan9ne.github.io/FlagNotFlag/";
                 Intent iff = new Intent(Intent.ACTION_VIEW);
                 iff.setData(Uri.parse(urlf));
                 startActivity(iff);
@@ -145,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
                         shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-                        String shareMessage = "Test your attention to detail on FLag Not a Flag Game" ;
+                        String shareMessage = "Test your attention to detail on Flag Not a Flag Game" ;
                         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareMessage+ ". https://play.google.com/store/apps/details?id=apps.betan9ne.flagnotflag");
                         startActivity(Intent.createChooser(shareIntent,"FLAG NOT A FLAG"));
                     }

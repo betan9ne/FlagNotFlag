@@ -96,7 +96,7 @@ public class QuizActivity extends AppCompatActivity {
                 int finalScore;
                 finalScore = isFlag;
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("score", finalScore*100);
+                editor.putInt("score", finalScore);
                 editor.putInt("attempts", attempts);
                 editor.apply();
 

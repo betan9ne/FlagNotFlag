@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/bck"
     tools:context=".DoneActivity">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-4118077067837317/4025479840"
-        android:layout_alignParentBottom="true" />
+        app:adUnitId="ca-app-pub-4118077067837317/4025479840" />
 
     <TextView
         android:id="@+id/hiscore"
@@ -39,9 +39,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:fontFamily="@font/custom_font"
             android:gravity="center_horizontal"
             android:text="Score/Attempts"
-            android:textColor="@android:color/background_light"
+            android:textAllCaps="true"
+            android:textColor="#A0001C"
             android:textSize="24sp"
             android:textStyle="bold"
             android:typeface="sans" />
@@ -52,7 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/border"
+            android:background="#800016"
+            android:fontFamily="@font/custom_font"
             android:gravity="center_horizontal"
             android:padding="16dp"
             android:textColor="@android:color/background_light"
@@ -76,8 +79,9 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="32dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/border"
+            android:background="#002962"
             android:clickable="true"
+            android:fontFamily="@font/custom_font"
             android:padding="20dp"
             android:text="TRY AGAIN"
             android:textColor="@android:color/background_light"
@@ -91,12 +95,14 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/border"
+            android:background="#004E89"
             android:clickable="true"
+            android:fontFamily="@font/custom_font"
             android:padding="20dp"
             android:text="SHARE"
             android:textColor="@android:color/background_light"
             android:textSize="18sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 </RelativeLayout>

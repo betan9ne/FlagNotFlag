@@ -20,6 +20,8 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 //import com.google.firebase.firestore.CollectionReference;
 //import com.google.firebase.firestore.Query;
@@ -44,7 +46,8 @@ public class DoneActivity extends AppCompatActivity {
     private SQLiteHandler db;
     private HighScoreHandler hdb;
     String name, email, u_id;
-    int hiscore , timer;
+    int hiscore , timer, score;
+    int attempts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,21 +71,20 @@ public class DoneActivity extends AppCompatActivity {
         Methods methods = new Methods(getApplicationContext());
         hdb = new HighScoreHandler(getApplicationContext());
         SharedPreferences prefs = this.getSharedPreferences("flagNoflag", Context.MODE_PRIVATE);
-        int score = prefs.getInt("score", 0); //0 is the default value
+       score = prefs.getInt("score", 0); //0 is the default value
         hiscore= prefs.getInt("hiscore", 0); //0 is the default value
         timer= prefs.getInt("timer", 0); //0 is the default value
-        int attempts= prefs.getInt("attempts", 0); //0 is the default value
+        attempts= prefs.getInt("attempts", 0); //0 is the default value
 
         hiscore = prefs.getInt(timer+"f", 0);
-
+        updateTOFirebase();
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("score", score);
         if(score > hiscore)
         {
             methods.setScore(timer, score);
             hiscore = score;
-            hiscoret.setText(score+"");
-            updateLederboard();
+           hiscoret.setText(score+"");
         }
         else
         {
@@ -109,7 +111,7 @@ public class DoneActivity extends AppCompatActivity {
                         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
                         shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-                        String shareMessage = "Test your attention to detail on FLag Not a Flag Game" ;
+                        String shareMessage = "Test your attention to detail on Flag Not a Flag Game" ;
                         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareMessage+ ". https://play.google.com/store/apps/details?id=apps.betan9ne.flagnotflag");
                         startActivity(Intent.createChooser(shareIntent,"FLAG NOT A FLAG"));
                     }
@@ -119,6 +121,20 @@ public class DoneActivity extends AppCompatActivity {
         points.setText(score+"/"+attempts);
     }
 
+    private void updateTOFirebase(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> scores = new HashMap<>();
+        scores.put("attempts", attempts);
+        scores.put("correct", score);
+        scores.put("time", timer);
+        scores.put("username", name);
+        scores.put("wrong", attempts -score);
+        scores.put("createdAt", FieldValue.serverTimestamp());
+
+        db.collection("board").document(timer+"").collection("scores").add(scores);
+        Toast.makeText(this, "Your score has been updated", Toast.LENGTH_SHORT).show();
+
+    }
 
 
     private void updateLederboard() {

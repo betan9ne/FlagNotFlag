@@ -4,14 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
+    android:background="@drawable/bck"
     tools:context=".Splash_screen">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/appset" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/custom_font"
+            android:gravity="center_vertical"
+            android:text="an AppSet Game"
+            android:textAlignment="center"
+            android:textColor="#A0001C"
+            android:textSize="60sp" />
+    </LinearLayout>
 </RelativeLayout>

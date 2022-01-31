@@ -5,27 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
-    android:background="@drawable/gradient"
+    android:background="@drawable/bck"
     tools:context=".QuizActivity">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-4118077067837317/4025479840"
-        android:layout_alignParentBottom="true" />
+        app:adUnitId="ca-app-pub-4118077067837317/4025479840" />
 
     <TextView
         android:id="@+id/timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-96dp"
+        android:layout_marginTop="-74dp"
         android:layout_marginRight="-30dp"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/custom_font"
         android:gravity="right"
         android:text="60"
-        android:textColor="#2AFFFFFF"
+        android:textColor="#2A002962"
         android:textSize="224sp"
         android:typeface="sans" />
 
@@ -42,7 +43,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
             android:layout_weight="1"
-            android:background="@drawable/border"
+            android:background="#C00021"
             android:clickable="true"
             android:padding="20dp"
             android:text="SEE SCORE"
@@ -57,6 +58,10 @@
             android:layout_height="300dp"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="64dp"
+            android:adjustViewBounds="false"
+            android:background="@drawable/border"
+            android:cropToPadding="false"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/bd" />
 
         <LinearLayout
@@ -77,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
-                android:background="@drawable/border"
+                android:background="#004E89"
                 android:clickable="true"
                 android:padding="20dp"
                 android:text="FLAG"
@@ -91,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_weight="1"
-                android:background="@drawable/border"
+                android:background="#800016"
                 android:clickable="true"
                 android:padding="20dp"
                 android:text="NOT FLAG"

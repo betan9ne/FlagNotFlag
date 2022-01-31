@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +17,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 import org.json.JSONArray;
@@ -36,7 +42,7 @@ import apps.betan9ne.flagnotflag.helper.leader_item;
 public class LeaderboardFragment extends BottomSheetDialogFragment {
 
     RecyclerView list;
-    ImageView left, right;
+    TextView left, right;
     TextView counter;
   String item;
     private leaderAdapter mAdapter;
@@ -56,12 +62,10 @@ public class LeaderboardFragment extends BottomSheetDialogFragment {
         leader_items = new ArrayList<>();
 
         final ArrayList<String> aList = new ArrayList<>();
-        aList.add("11");
-        aList.add("16");
-        aList.add("21");
-        aList.add("26");
-        aList.add("31");
-        aList.add("36");
+        aList.add("10");
+        aList.add("15");
+        aList.add("30");
+        aList.add("35");
         final ListIterator<String> listIterator = aList.listIterator();
         item = aList.get(0);
         counter.setText(aList.get(0) + "");
@@ -77,7 +81,7 @@ public class LeaderboardFragment extends BottomSheetDialogFragment {
                     left.setVisibility(View.VISIBLE);
                     item = listIterator.next();
                     counter.setText(item);
-                  getBoard(item);
+                    getLeaderboard(item);
                 }
             }
         });
@@ -94,7 +98,7 @@ public class LeaderboardFragment extends BottomSheetDialogFragment {
                     right.setVisibility(View.VISIBLE);
                     item = listIterator.previous();
                     counter.setText(item+"");
-                    getBoard(item);
+                    getLeaderboard(item);
                 }
             }
         });
@@ -104,6 +108,30 @@ public class LeaderboardFragment extends BottomSheetDialogFragment {
         list.setAdapter(mAdapter);
         getBoard(aList.get(0) + "");
         return v;
+    }
+
+    public void getLeaderboard(final String id){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("board").document(id+"").collection("scores").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                leader_item s = document.toObject(leader_item.class);
+//                                leader_item item = new leader_item();
+//                                item.setName(document.getData().f_name);
+////                                item.setScore(document.getData().("score"));
+                           leader_items.add(s);
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                            }
+                        }
+                        else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     public void getBoard(final String id)
